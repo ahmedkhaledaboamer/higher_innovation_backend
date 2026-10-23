@@ -1,7 +1,7 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Express } from 'express';
-import helmet from 'helmet';
+import * as helmetModule from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { corsOptions } from './config/cors.js';
 import { env } from './config/env.js';
@@ -11,6 +11,10 @@ import { notFound } from './middlewares/notFound.js';
 import { apiRateLimiter } from './middlewares/rateLimiter.js';
 import { requestLogger } from './middlewares/requestLogger.js';
 import { v1Router } from './routes/index.js';
+
+// helmet ships separate CJS and ESM typings; reading `default` from the namespace is callable under
+// both (Vercel's builder type-checks this file as CommonJS, where a default import is the module object).
+const helmet = helmetModule.default;
 
 /**
  * Builds the Express application without starting a server.
