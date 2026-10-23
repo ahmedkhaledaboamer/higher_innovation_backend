@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { type Express } from 'express';
+import express, { type Express, type RequestHandler } from 'express';
 import * as helmetModule from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { corsOptions } from './config/cors.js';
@@ -12,9 +12,11 @@ import { apiRateLimiter } from './middlewares/rateLimiter.js';
 import { requestLogger } from './middlewares/requestLogger.js';
 import { v1Router } from './routes/index.js';
 
-// helmet ships separate CJS and ESM typings; reading `default` from the namespace is callable under
-// both (Vercel's builder type-checks this file as CommonJS, where a default import is the module object).
-const helmet = helmetModule.default;
+// helmet ships separate CJS and ESM typings, and Vercel's builder resolves them differently from
+// `tsc` (there both a default import and `.default` are typed as the module object). Pick the
+// function at runtime — it is `.default` under ESM and CJS alike — and type it ourselves.
+const helmetExport = helmetModule as unknown as { default?: unknown };
+const helmet = (typeof helmetExport.default === 'function' ? helmetExport.default : helmetModule) as () => RequestHandler;
 
 /**
  * Builds the Express application without starting a server.
