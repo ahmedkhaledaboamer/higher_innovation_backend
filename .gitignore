@@ -1,0 +1,21 @@
+node_modules/
+dist/
+coverage/
+
+
+# Secrets: every env file except the committed template
+.env
+.env.*
+!.env.example
+# Never track keys, certificates or secret folders (defensive; none exist today)
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+*.log
+.DS_Store
+
+# Local email outbox (MAIL_TRANSPORT=outbox)
+.outbox/
