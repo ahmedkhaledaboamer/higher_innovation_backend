@@ -2,7 +2,16 @@ import type { CorsOptions } from 'cors';
 import { ApiError } from '../utils/ApiError.js';
 import { env } from './env.js';
 
-const allowedOrigins = new Set(env.CORS_ORIGINS);
+/**
+ * The deployed frontends (Vercel). They are always allowed so a missing or stale CORS_ORIGINS
+ * setting on the host cannot lock users out; add any other origin through CORS_ORIGINS.
+ */
+export const DEPLOYED_FRONTEND_ORIGINS = [
+  'https://higher-innovation-academy-crm.vercel.app',
+  'https://higher-innovation-academy-ld7xo7a0g.vercel.app',
+];
+
+const allowedOrigins = new Set([...env.CORS_ORIGINS, new URL(env.FRONTEND_URL).origin, ...DEPLOYED_FRONTEND_ORIGINS]);
 
 /**
  * Only the configured frontend origins may call the API from a browser.
