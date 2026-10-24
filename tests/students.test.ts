@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import { Student } from '../src/modules/students/student.model.js';
 import { createCourse, createStudent, enroll, setEnrollmentStatus, studentBody } from './helpers/academy.js';
 import { useTestDatabase } from './helpers/db.js';

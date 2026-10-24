@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { type Express, type Request, type RequestHandler, type Response } from 'express';
+import express, { type Express, type RequestHandler } from 'express';
 import * as helmetModule from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { corsOptions } from './config/cors.js';
@@ -11,7 +11,6 @@ import { notFound } from './middlewares/notFound.js';
 import { apiRateLimiter } from './middlewares/rateLimiter.js';
 import { requestLogger } from './middlewares/requestLogger.js';
 import { v1Router } from './routes/index.js';
-import { logger } from './utils/logger.js';
 
 // helmet ships separate CJS and ESM typings, and Vercel's builder resolves them differently from
 // `tsc` (there both a default import and `.default` are typed as the module object). Pick the
@@ -21,7 +20,7 @@ const helmet = (typeof helmetExport.default === 'function' ? helmetExport.defaul
 
 /**
  * Builds the Express application without starting a server.
- * server.ts calls listen(); tests pass the app straight to Supertest.
+ * main.ts calls listen(); serverless.ts serves it on Vercel; tests pass it straight to Supertest.
  *
  * Middleware order matters: a request passes through these top to bottom.
  */
@@ -59,41 +58,4 @@ export function createApp(): Express {
   app.use(errorHandler);
 
   return app;
-}
-
-/* ------------------------------ serverless entry ----------------------------- */
-
-let serverlessApp: Express | undefined;
-let databaseReady: Promise<void> | undefined;
-
-/**
- * Entry point for serverless hosting (Vercel loads this file's default export as the handler).
- * There is no listen() there, so the database is connected — with the same checks server.ts runs
- * at boot — on the first request and reused while the instance stays warm. A failed connection is
- * retried on the next request instead of being cached.
- */
-export default async function serverlessHandler(req: Request, res: Response): Promise<void> {
-  databaseReady ??= (async () => {
-    const database = await import('./database/mongoose.js');
-    await database.connectDatabase();
-    await database.pingDatabase();
-    await database.assertTransactionSupport();
-    await database.assertServerVersion();
-    logger.info('Connected to MongoDB (serverless)');
-  })().catch((error: unknown) => {
-    databaseReady = undefined;
-    throw error;
-  });
-
-  try {
-    await databaseReady;
-  } catch (error) {
-    // Details stay in the log; the client only learns that the service is unavailable.
-    logger.error({ err: error }, 'Database connection failed');
-    res.status(503).json({ success: false, message: 'Service temporarily unavailable', code: 'SERVICE_UNAVAILABLE' });
-    return;
-  }
-
-  serverlessApp ??= createApp();
-  serverlessApp(req, res);
 }

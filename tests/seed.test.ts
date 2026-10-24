@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import { seedOwner, seedRoles } from '../src/database/setup.js';
 import { Role } from '../src/modules/roles/role.model.js';
 import { User } from '../src/modules/users/user.model.js';

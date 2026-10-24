@@ -3,7 +3,7 @@ import express from 'express';
 import { pino } from 'pino';
 import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import { ActionToken } from '../src/modules/auth/actionToken.model.js';
 import { REDACT_PATHS } from '../src/utils/logger.js';
 import { useTestDatabase } from './helpers/db.js';

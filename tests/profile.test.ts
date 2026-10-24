@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import { User } from '../src/modules/users/user.model.js';
 import { useTestDatabase } from './helpers/db.js';
 import { signedInAs } from './helpers/factories.js';

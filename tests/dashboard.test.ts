@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import type { RoleKey } from '../src/modules/roles/permissions.js';
 import { assign, createCourse, createStudent, createTrainer, enroll } from './helpers/academy.js';
 import { useTestDatabase } from './helpers/db.js';

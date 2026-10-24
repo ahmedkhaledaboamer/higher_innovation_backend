@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import { RefreshToken } from '../src/modules/auth/refreshToken.model.js';
 import { User } from '../src/modules/users/user.model.js';
 import { hashToken } from '../src/utils/tokens.js';

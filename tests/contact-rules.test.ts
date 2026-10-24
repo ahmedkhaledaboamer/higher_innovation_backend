@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import { ContactLock, contactLockKey } from '../src/database/contactLock.model.js';
 import { Lead } from '../src/modules/leads/lead.model.js';
 import { Student } from '../src/modules/students/student.model.js';

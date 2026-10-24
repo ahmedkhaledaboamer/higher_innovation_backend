@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 import { ActionToken } from '../src/modules/auth/actionToken.model.js';
 import { hashToken } from '../src/utils/tokens.js';
 import { useTestDatabase } from './helpers/db.js';

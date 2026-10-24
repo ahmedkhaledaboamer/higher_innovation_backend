@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { createApp } from '../src/app.js';
+import { createApp } from '../src/createApp.js';
 
 // This file deliberately never connects to MongoDB: that is a real "database down" state.
 const app = createApp();

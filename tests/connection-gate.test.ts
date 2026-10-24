@@ -41,7 +41,7 @@ describe('connection gate', () => {
     });
     try {
       // Load every model, as the API and the scripts do before connecting.
-      await import('../src/app.js');
+      await import('../src/createApp.js');
       const { connectDatabase } = await import('../src/database/mongoose.js');
       expect(mongoose.modelNames().length).toBeGreaterThan(5);
 
